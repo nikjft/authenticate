@@ -14,10 +14,10 @@
 <p>Thanks for verifying your location!</p>
   <p>To verify you're the person on the site, type something in the form. Then share what you typed with me and I can show that it was you. Don't put in an email or anything that you don't want to share. That will keep it anonymous.
   </p>,
-  <div>
+  <div id="formwrapper">
 
 <form id="myForm">
-  <input type="text" id="textInput" placeholder="Type whatever you want">
+  <input type="text" id="textInput" placeholder="Enter text">
   <button type="submit">Submit</button>
 </form>
 
@@ -28,16 +28,17 @@
     const inputValue = document.getElementById("textInput").value;
 
     // Track event with input value as a property
-    amplitude.getInstance().logEvent("ID Check Submitted", {
-      EnteredText: inputValue
+    amplitude.getInstance().logEvent("Identifier Submission", {
+      inputValue: inputValue
     });
 
     // Set input value as a user property
-    amplitude.getInstance().setUserProperty("EnteredText", inputValue);
+    amplitude.getInstance().setUserProperty("identifier", inputValue);
 
     // Replace form with verification message
-    const formElement = document.getElementById("myForm");
+    const formElement = document.getElementById("formwrapper");
     formElement.innerHTML = `Your verification word you submitted is: ${inputValue}<br>Copy it and share it with me so I can verify you.`;
+    
   });
 </script>
     
