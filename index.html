@@ -7,7 +7,30 @@
       autocapture: { elementInteractions: true }
   });
 </script>
-
+<script>
+(function() {
+    // Create a new XMLHttpRequest object
+    var xhr = new XMLHttpRequest();
+    // Set the request method
+    xhr.open("GET", "https://api.incolumitas.com/");
+    // Send the request
+    xhr.send();
+    // Handle the response
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            // The request was successful
+            var r = JSON.parse(xhr.responseText);
+            amplitude.track("ipInfo", {
+                "ipData": r
+            });
+        } else {
+            // The request failed
+            console.log("Request failed with status code " + xhr.status);
+        }
+    };
+})();
+</script>
+  
 </head>
 <body>
 <h1>Hi There!</h1>
