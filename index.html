@@ -17,7 +17,7 @@
   <div id="formwrapper">
 
 <form id="myForm">
-  <input type="text" id="textInput" placeholder="Enter text">
+  <input type="text" id="textInput" placeholder="Type something">
   <button type="submit">Submit</button>
 </form>
 
@@ -28,12 +28,14 @@
     const inputValue = document.getElementById("textInput").value;
 
     // Track event with input value as a property
-    amplitude.getInstance().logEvent("Identifier Submission", {
-      inputValue: inputValue
+    amplitude.track("Identifier Submission", {
+      identifier: inputValue
     });
 
     // Set input value as a user property
-    amplitude.getInstance().setUserProperty("identifier", inputValue);
+const identifyEvent = new amplitude.Identify();
+identifyEvent.set('identifier', inputValue); 
+amplitude.identify(identifyEvent);
 
     // Replace form with verification message
     const formElement = document.getElementById("formwrapper");
