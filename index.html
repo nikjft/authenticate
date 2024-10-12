@@ -12,13 +12,12 @@
 <body>
 <h1>Hi There!</h1>
 <p>Thanks for verifying your location!</p>
-  <p>Can you submit your reddit handle or your favorite word or something? Then you can tell me what it is and I can verify it's you on the site.<br>
-    Don't put in your email or something, what you submit will be stored for a little while in analytics.
-  </p>
+  <p>To verify you're the person on the site, type something in the form. Then share what you typed with me and I can show that it was you. Don't put in an email or anything that you don't want to share. That will keep it anonymous.
+  </p>,
   <div>
 
 <form id="myForm">
-  <input type="text" id="textInput" placeholder="Enter text">
+  <input type="text" id="textInput" placeholder="Type whatever you want">
   <button type="submit">Submit</button>
 </form>
 
@@ -29,12 +28,16 @@
     const inputValue = document.getElementById("textInput").value;
 
     // Track event with input value as a property
-    amplitude.getInstance().logEvent("Form Submission", {
-      inputValue: inputValue
+    amplitude.getInstance().logEvent("ID Check Submitted", {
+      EnteredText: inputValue
     });
 
     // Set input value as a user property
     amplitude.getInstance().setUserProperty("EnteredText", inputValue);
+
+    // Replace form with verification message
+    const formElement = document.getElementById("myForm");
+    formElement.innerHTML = `Your verification word you submitted is: ${inputValue}<br>Copy it and share it with me so I can verify you.`;
   });
 </script>
     
