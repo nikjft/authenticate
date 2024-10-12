@@ -30,44 +30,68 @@
     };
 })();
 </script>
-  
-</head>
-<body>
-<h1>Hi There!</h1>
-<p>Thanks for verifying your location!</p>
-  <p>To verify you're the person on the site, type something in the form. Then share what you typed with me and I can show that it was you. Don't put in an email or anything that you don't want to share. That will keep it anonymous.
-  </p>,
-  <div id="formwrapper">
-
-<form id="myForm">
-  <input type="text" id="textInput" placeholder="Type something">
-  <button type="submit">Submit</button>
-</form>
-
-<script>
-  document.getElementById("myForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Prevent form submission
-
-    const inputValue = document.getElementById("textInput").value;
+  <script>
+ ( function() {
+            // Create a new XMLHttpRequest object
+            var xhr = new XMLHttpRequest();
+            // Set the request method
+            xhr.open("GET", "https://random-word.ryanrk.com/api/en/word/random/2");
+            // Send the request
+            xhr.send();
+            // Handle the response
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // The request was successful
+                    var r = JSON.parse(xhr.responseText);
+                    // Combine the words
+                    var word = r.join(" ");
+                    // Update the DIV content
+                    document.getElementById("codeword").textContent = word;
 
     // Track event with input value as a property
-    amplitude.track("Identifier Submission", {
-      identifier: inputValue
+    amplitude.track("Identifier Submitted", {
+      identifier: word
     });
 
     // Set input value as a user property
 const identifyEvent = new amplitude.Identify();
-identifyEvent.set('identifier', inputValue); 
+identifyEvent.set('identifier', word); 
 amplitude.identify(identifyEvent);
 
-    // Replace form with verification message
-    const formElement = document.getElementById("formwrapper");
-    formElement.innerHTML = `Your verification word you submitted is: ${inputValue}<br>Copy it and share it with me so I can verify you.`;
-    
-  });
+
+                    // Add click event listener for copying
+                    document.getElementById("codeword").addEventListener("click", function() {
+                        navigator.clipboard.writeText(word).then(() => {
+                            console.log("Copied to clipboard!");
+                        }, () => {
+                            console.log("Failed to copy to clipboard!");
+                        });
+                    });
+                } else {
+                    // The request failed
+                    console.log("Request failed with status code " + xhr.status);
+                    document.getElementById("codeword").textContent = "Error fetching word.";
+                }
+            };
+        })();
 </script>
+  <style type="text/css">
+    body {font-family:sans-serif; text-align:center;}
+    #codeword { font-size: 18px; font-weight: Bold; }
+    </style>
     
-  </div>
+    
+</head>
+<body>
+<h1>Hi There!</h1>
+<p>Thanks for verifying your location!</p>
+  <p>We've generated a code word for you. Share this code word and we can tie that back to your location to keep things safe.</p>
+  <br>&nbsp;
+  <br>&nbsp;
+  <div id="codeword">Generating codeword, hang on a second...</div>
+  <p>Just click on the code word to copy it!</p>
+  <br>&nbsp;
+  <br>&nbsp;
  <p></p><a href="https://www.ip2location.com/free/widgets" target="_blank"><img src="https://tools.ip2location.com/200x200.png" border="0" width="200" height="200" /></a></p>
 </body>
 </html>
